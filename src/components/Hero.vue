@@ -1,12 +1,12 @@
 <template>
-    <section class="hero">
+    <section class="hero" id = "inicio">
         <div class="container">
             <div class="container__texto">
                 <h2 class="container__titulo"> A melhor escolha para sua gestão empresarial</h2>
                 <p class="container__paragrafo">Assuma o controle total do seu negócio com uma plataforma que integra
                     todos os seus processos em uma interface intuitiva, substituindo o caos das planilhas por decisões
                     estratégicas baseadas em dados reais.</p>
-                <a href="#" class="container__button"><button>Experimente Grátis</button></a>
+                <a href="#contato" class="container__button"><button>Experimente Grátis</button></a>
             </div>
             <img src="../assets/images/ImagemFicticia1.png" alt="PessoaFicticiatrabalhando" class="container__img"
                 width="20%">
@@ -35,9 +35,9 @@ export default {
     gap: 10rem;
     margin: 0 2rem;
     padding: 1.5rem 5rem;
-    background-color: #061E29;
+    background-color: var(--cor-primaria);
     border-radius: 10px;
-    color: #F3F4F4;
+    color: var(--cor-texto);
 }
 
 .container__texto {
@@ -45,7 +45,7 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: var(--fonte-principal);
     align-items: center;
 }
 
@@ -61,19 +61,19 @@ export default {
 }
 
 .container__button button {
-    background-color: #1D546D;
-    color: #F3F4F4;
+    background-color: var(--cor-terciaria);
+    color: var(--cor-texto);
     border: none;
     padding: 1rem 2rem;
     border-radius: 8px;
     font-size: 16px;
     font-weight: 700;
     cursor: pointer;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: var(--fonte-principal);
 }
 
 .container__button button:hover {
-    background-color: #5F9598;
+    background-color: var(--cor-secundaria);
 }
 
 .container__img {

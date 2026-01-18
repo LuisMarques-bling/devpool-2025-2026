@@ -1,13 +1,14 @@
 <template>
-    <section class="plans">
+    <section class="plans" id = "planos">
         <div v-for="plan in plans" :key="plan.name"
-             :class="['plans__' + plan.type, { 'plans__highlight': plan.type === 'essential' && highlightEssential, 'plans__card': true }]">
-            <a href="#" class="plans__link" @click.prevent>
+             :class="['plans__' + plan.type, { 'plans__highlight': plan.destaque === true && highlight, 'plans__card': true }]" >
+            <a href="#contato" class="plans__link" id = "funcionalidades">
                 <h3 :class="'plans__' + plan.type + '-titulo'">{{ plan.name }}</h3>
                 <p :class="'plans__' + plan.type + '-texto'">{{ plan.currency }} {{ plan.price.toFixed(2) }}</p>
+                <p :class="'plans__' + plan.type + '-texto'">{{ plan.periodicity }}</p>
+                <p :class="'plans__' + plan.type + '-texto'"v-html = "plan.features.join('<br>')"></p>
+                <button class="contratar">Contratar</button>
             </a>
-
-            <!-- detalhes por plano (DENTRO do v-for) -->
             <div class="plans__details" aria-hidden="true">
                 <p class="plans__desc">{{ plan.periodicity }}</p>
                 <ul class="plans__features">
@@ -26,7 +27,7 @@ import plansData from '../mocks/plans.json'
 export default {
     name: 'Plans',
     props: {
-        highlightEssential: {
+        highlight: {
             type: Boolean,
             default: true
         }
@@ -44,77 +45,38 @@ export default {
 .plans {
     display: flex;
     align-items: center;
+    padding: 2em;
     margin: 0 5rem;
     justify-content: space-around;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: var(--fonte-principal);
 }
 
-.plans__basic {
-    border: 2px solid #061E29;
+.plans__basic, .plans__essential, .plans__premium  {
+    border: 2px solid var(--cor-primaria);
     text-align: center;
     border-radius: 15px;
-    color: #F3F4F4;
-
+    color: var(--cor-texto);
 }
 
-.plans__basic-titulo {
-    padding: 2rem;
+.plans__basic-titulo, .plans__essential-titulo, .plans__premium-titulo {
+    padding: 0.5rem 0;
     font-size: 24px;
 }
 
-.plans__basic-texto {
+.plans__basic-texto, .plans__essential-texto, .plans__premium-texto {
     padding-bottom: 2rem;
     font-size: 20px;
 }
-
-.plans__essential {
-    border: 2px solid #061E29;
-    text-align: center;
-    border-radius: 15px;
-    background-color: #061E29;
-    color: #F3F4F4;
-}
-
-.plans__essential-titulo {
-    padding: 2rem;
-    font-size: 24px;
-}
-
-.plans__essential-texto {
-    padding-bottom: 2rem;
-    font-size: 20px;
-}
-
 .plans__highlight {
-    box-shadow: 0 8px 24px rgba(6, 30, 41, 0.25);
+    box-shadow: 0 8px 24px rgba(6, 30, 41, 0.7);
     transform: translateY(-10px);
     transition: transform .2s, box-shadow .2s;
-}
-.plans__essential.plans__highlight {
-    background-color: #0b2a36;
+    background-color: var(--cor-primaria);
     z-index: 2;
 }
-
-.plans__premium {
-    border: 2px solid #061E29;
-    text-align: center;
-    border-radius: 15px;
-    color: #F3F4F4;
-}
-
-.plans__premium-titulo {
-    padding: 2rem;
-    font-size: 24px;
-}
-
-.plans__premium-texto {
-    padding-bottom: 2rem;
-    font-size: 20px;
-}
-
 a {
     text-decoration: none;
-    color: #F3F4F4;
+    color: var(--cor-texto);
 }
 
 .plans__basic,
@@ -122,7 +84,7 @@ a {
 .plans__premium {
     position: relative;
     width: 260px;
-    padding: 0.6rem;
+    padding: 1.5rem;
     box-sizing: border-box;
     background-clip: padding-box;
 }
@@ -169,6 +131,15 @@ a {
     padding-left: 1rem;
     font-size: 18px;
     list-style:circle;
-    color: #e6f0f4;
+    color: var(--cor-texto);
+}
+.contratar{
+    font-size: 20px;
+    padding: 0.3em;
+    background-color: var(--cor-secundaria);
+    border-radius: 5px;
+}
+.contratar:hover{
+    background-color: var(--cor-terciaria);
 }
 </style>
