@@ -5,11 +5,12 @@
       <div class="cabecalho-navigation">
         <nav>
           <ul>
-            <li v-for="item in menuItens" :key="item.id"><a :href="'#' + item.id" class="navigation" @click.prevent="() => scrollToSection(item.id)">{{item.nome}}</a></li>
+            <li v-for="item in menuItens" :key="item.id"><a :href="'#' + item.id" class="navigation"
+                @click.prevent="() => scrollToSection(item.id)">{{ item.nome }}</a></li>
           </ul>
         </nav>
         <nav class="navigation-actions">
-          <a href="https://api.bling.com.br/Api/v3" class="login">Entrar</a>
+          <a href="#" @click.prevent="iniciarLogin" class="login">Entrar</a>
         </nav>
       </div>
     </div>
@@ -17,7 +18,23 @@
 </template>
 
 <script lang="ts">
+import { useAuthStore } from '../stores/auth';
+
 export default {
+  setup() {
+    const authStore = useAuthStore();
+
+    const iniciarLogin = () => {
+      const state = authStore.generateState();
+      const baseUrl = "https://www.bling.com.br/b/Api/v3/oauth/authorize"
+
+      const loginUrl = `${baseUrl}?response_type=code&client_id=${authStore.clientId}&state=${state}`
+
+      window.location.href = loginUrl;
+    };
+    return { iniciarLogin};
+    
+  },
   name: 'cabecalho',
   data() {
     return {
@@ -36,7 +53,7 @@ export default {
         element.scrollIntoView({ behavior: 'smooth', block: 'start' })
       }
     }
-  }
+  },
 };
 </script>
 
