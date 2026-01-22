@@ -1,19 +1,25 @@
 <template>
-  <main>
-    <h1>Produto com Pinia</h1>
-    <div class="container">
-      <div class="column">
-        <ProductPage />
-      </div>
-    </div>
-  </main>
+  <body>
+    <Cabecalho />
+    <LandingPage />
+    <Rodape />
+  </body>
 </template>
 
-<script setup lang="ts">
-import ProductPage from './components/ProductPage.vue';
+<script lang="ts">
+import Cabecalho from './components/Cabecalho.vue';
+import LandingPage from './components/LandingPage.vue';
+import Rodape from './components/Rodape.vue';
+export default {
+  name: 'App',
+  components: {
+    Cabecalho, LandingPage, Rodape
+  },
+};
 </script>
 
 <style>
-/* Estilos adicionais específicos do App */
+body {
+  background-color: var(--cor-terciaria);
+}
 </style>
-

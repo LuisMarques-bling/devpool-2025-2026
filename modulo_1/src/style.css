@@ -2,7 +2,18 @@
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+}
+
+:root {
+  --cor-primaria: #061E29;
+  --cor-secundaria: #5F9598;
+  --cor-terciaria: #1D546D;
+  --cor-texto: #F3f4f4;
+  --fonte-principal: 'Josefin Sans', sans-serif;
+}
+
+section[id]{
+  scroll-margin-top: 50px;
 }
 
 body {

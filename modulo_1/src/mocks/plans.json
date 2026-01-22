@@ -1,0 +1,46 @@
+{
+    "plans": [
+        {
+            "name": "Plano Starter",
+            "price": 35.00,
+            "currency": "R$",
+            "type": "basic",
+            "periodicity": "Mensal",
+            "features": [
+                "Acesso básico",
+                "Suporte por email",
+                "2 Usuários"
+            ],
+            "destaque": false
+        },
+        {
+            "name": "Plano Essencial",
+            "price": 75.00,
+            "currency": "R$",
+            "type": "essential",
+            "periodicity": "Mensal/Anual",
+            "features": [
+                "Acesso completo",
+                "Suporte prioritário (telefone e chat)",
+                "5 Usuários",
+                "Conta gerenciada"
+            ],
+            "destaque": true
+        },
+        {
+            "name": "Plano Premium",
+            "price": 150.00,
+            "currency": "R$",
+            "type": "premium",
+            "periodicity": "Mensal/Semestral/Anual",
+            "features": [
+                "Acesso completo",
+                "Suporte total <br> (+ WhatsApp)",
+                "Usuários ilimitados",
+                "Gerente especializado",
+                "Integrações via API"
+            ],
+            "destaque": false
+        }
+    ]
+}

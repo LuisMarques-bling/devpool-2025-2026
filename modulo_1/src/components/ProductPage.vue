@@ -10,9 +10,9 @@
 
 <script setup lang="ts">
 
-import ProductImage from './ProductImage.vue'
+import ProductImage from './Cabecalho.vue'
 import ProductOptions from './ProductOptions.vue'
-import AddToCartButton from './AddToCartButton.vue'
+import AddToCartButton from './LandingPage.vue'
 
 </script>
 
