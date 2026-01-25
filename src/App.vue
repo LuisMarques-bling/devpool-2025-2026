@@ -1,7 +1,7 @@
 <template>
     <Cabecalho />
     <router-view />
-    <Rodape />
+    <Rodape class="rodape" />
 </template>
 
 <script lang="ts">
@@ -18,7 +18,18 @@ export default {
 </script>
 
 <style>
-body {
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
   background-color: var(--cor-terciaria);
+  margin: 0;
 }
+
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 </style>

@@ -46,14 +46,69 @@ app.post('/auth/bling', async (req, res) => {
 app.get('/api/produtos', async (req, res) =>{
     const authHeader = req.headers.authorization;
     if(!authHeader) return res.status(401).json({error: 'Token não fornecido'});
+    
+    const {pagina, nome, codigo} = req.query;
 
     try {
-        const response = await axios.get('https://www.bling.com.br/b/Api/v3/produtos', {
+        const response =  await axios.get('https://api.bling.com.br/Api/v3/produtos',{
+            params: {
+                pagina: Number(pagina) || 1,
+                limite: 10, 
+                ...(nome && {nome}),
+                ...(codigo && {codigo})
+            },
             headers:{ 'Authorization': authHeader}
         });
+     
         res.json(response.data);
     } catch (error) {
         res.status(error.response?.status || 500).json({error: 'Erro no Bling'})
+    }
+});
+
+app.post('/api/produtos', async (req, res) =>{
+    const authHeader = req.headers.authorization;
+    if (!authHeader) return res.status(401).json({error: 'Token não fornecido'});
+
+    const token = authHeader.replace('Bearer', '').trim();
+
+    try{
+        const response = await axios.post('https://api.bling.com.br/Api/v3/produtos', req.body, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        res.status(201).json(response.data);
+    } catch (error) {
+        console.error("Erro ao cadastrar no Bling:", error.response?.data);
+        res.status(error.response?.status || 500).json(error.response?.data);
+    }
+});
+
+app.delete('/api/produtos/:id', async (req, res) =>{
+    const authHeader = req.headers.authorization;
+    if (!authHeader) return res.status(401).json({ error: 'Token não fornecido'});
+
+    const {id} = req.params;
+
+    const token = authHeader.replace('Bearer', '').trim();
+
+    try {
+        await axios.patch(`https://api.bling.com.br/Api/v3/produtos/${id}/situacoes`, 
+            {situacao: 'E'},
+            {
+            headers: { 'Authorization': `Bearer ${token}`,}
+        });
+
+        console.log(`Produto ${id} excluido com sucesso no Bling`)
+        res.status(204).send();
+    } catch (error) {
+        console.error("Erro ao deletar:", error.response?.data);
+        res.status(error.response?.status || 500).json({
+            message: 'Erro ao excluir no Bling',
+            detalhes: error.response?.data || error.message
+        });
     }
 });
 

@@ -4,7 +4,7 @@ import axios from "axios";
 export const useAuthStore = defineStore('auth', {
     state: () => ({
         clientId: import.meta.env.VITE_BLING_CLIENT_ID,
-        accessToken: localStorage.getItem('access_token'),
+        accessToken: localStorage.getItem('access_token') || null,
         refreshToken: localStorage.getItem('refresh_token'),
         isAuthenticated: !!localStorage.getItem('access_token'),
     }),
