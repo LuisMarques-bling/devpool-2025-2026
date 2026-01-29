@@ -60,7 +60,7 @@ app.get('/api/produtos', async (req, res) => {
         if (pesquisa && pesquisa.trim() !== "") {
             const termo = pesquisa.trim();
 
-            const eProvavelSKU = !termo.includes(' ') && (/\d/.test(termo) || termo.length <= 6);
+            const eProvavelSKU = !termo.includes(' ') && (/\d/.test(termo) || termo.length <= 4);
 
             if (eProvavelSKU) {
                 params.codigo = termo;
