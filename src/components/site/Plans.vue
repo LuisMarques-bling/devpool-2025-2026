@@ -22,7 +22,7 @@
 
 
 <script lang="ts">
-import plansData from '../mocks/plans.json'
+import plansData from '../../mocks/plans.json'
 
 export default {
     name: 'Plans',

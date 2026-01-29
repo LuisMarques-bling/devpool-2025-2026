@@ -5,8 +5,8 @@
 </template>
 
 <script lang="ts">
-import Cabecalho from './components/Cabecalho.vue';
-import Rodape from './components/Rodape.vue';
+import Cabecalho from './components/site/Cabecalho.vue';
+import Rodape from './components/site/Rodape.vue';
 
 
 export default {

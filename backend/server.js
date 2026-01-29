@@ -43,36 +43,59 @@ app.post('/auth/bling', async (req, res) => {
     }
 });
 
-app.get('/api/produtos', async (req, res) =>{
+app.get('/api/produtos', async (req, res) => {
     const authHeader = req.headers.authorization;
-    if(!authHeader) return res.status(401).json({error: 'Token não fornecido'});
-    
-    const {pagina, nome, codigo} = req.query;
+    if (!authHeader) return res.status(401).json({ error: 'Token não fornecido' });
+
+    const { pagina, pesquisa, situacao, dataInicial, dataFinal } = req.query;
+    const token = authHeader.replace('Bearer', '').trim();
 
     try {
-        const response =  await axios.get('https://api.bling.com.br/Api/v3/produtos',{
-            params: {
-                pagina: Number(pagina) || 1,
-                limite: 10, 
-                ...(nome && {nome}),
-                ...(codigo && {codigo})
-            },
-            headers:{ 'Authorization': authHeader}
+
+        const params = {
+            pagina: Number(pagina || 1),
+            limite: 10
+        };
+
+        if (pesquisa && pesquisa.trim() !== "") {
+            const termo = pesquisa.trim();
+
+            const eProvavelSKU = !termo.includes(' ') && (/\d/.test(termo) || termo.length <= 6);
+
+            if (eProvavelSKU) {
+                params.codigo = termo;
+                console.log(`Buscando por SKU: ${termo}`);
+            } else {
+                params.nome = termo;
+                console.log(`Buscando por Nome: ${termo}`);
+            }
+        }
+
+        if (situacao === 'A') params.criterio = 2;
+        else if (situacao === 'I') params.criterio = 3;
+        else if (situacao === 'E') params.criterio = 4;
+
+        if (dataInicial && dataInicial !== "") params.dataAlteracaoInicial = dataInicial;
+        if (dataFinal && dataFinal !== "") params.dataAlteracaoFinal = dataFinal;
+
+        const response = await axios.get('https://api.bling.com.br/Api/v3/produtos', {
+            params,
+            headers: { 'Authorization': `Bearer ${token}` }
         });
-     
+
         res.json(response.data);
     } catch (error) {
-        res.status(error.response?.status || 500).json({error: 'Erro no Bling'})
+        res.status(error.response?.status || 500).json({ error: 'Erro no Bling' })
     }
 });
 
-app.post('/api/produtos', async (req, res) =>{
+app.post('/api/produtos', async (req, res) => {
     const authHeader = req.headers.authorization;
-    if (!authHeader) return res.status(401).json({error: 'Token não fornecido'});
+    if (!authHeader) return res.status(401).json({ error: 'Token não fornecido' });
 
     const token = authHeader.replace('Bearer', '').trim();
 
-    try{
+    try {
         const response = await axios.post('https://api.bling.com.br/Api/v3/produtos', req.body, {
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -86,20 +109,20 @@ app.post('/api/produtos', async (req, res) =>{
     }
 });
 
-app.delete('/api/produtos/:id', async (req, res) =>{
+app.delete('/api/produtos/:id', async (req, res) => {
     const authHeader = req.headers.authorization;
-    if (!authHeader) return res.status(401).json({ error: 'Token não fornecido'});
+    if (!authHeader) return res.status(401).json({ error: 'Token não fornecido' });
 
-    const {id} = req.params;
+    const { id } = req.params;
 
     const token = authHeader.replace('Bearer', '').trim();
 
     try {
-        await axios.patch(`https://api.bling.com.br/Api/v3/produtos/${id}/situacoes`, 
-            {situacao: 'E'},
+        await axios.patch(`https://api.bling.com.br/Api/v3/produtos/${id}/situacoes`,
+            { situacao: 'E' },
             {
-            headers: { 'Authorization': `Bearer ${token}`,}
-        });
+                headers: { 'Authorization': `Bearer ${token}`, }
+            });
 
         console.log(`Produto ${id} excluido com sucesso no Bling`)
         res.status(204).send();
@@ -111,6 +134,38 @@ app.delete('/api/produtos/:id', async (req, res) =>{
         });
     }
 });
+
+app.get('/api/produtos/:id', async (req, res) => {
+    const authHeader = req.headers.authorization;
+    const { id } = req.params;
+    const token = authHeader.replace('Bearer', '').trim();
+
+    try {
+        const response = await axios.get(`https://api.bling.com.br/Api/v3/produtos/${id}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        res.json(response.data);
+    } catch (error) {
+        console.error("Erro ao buscar produto:", error.response?.data);
+        res.status(error.response?.status || 500).json(error.response?.data);
+    }
+});
+
+app.put('/api/produtos/:id', async (req, res) => {
+    const authHeader = req.headers.authorization;
+    const { id } = req.params;
+    const token = authHeader.replace('Bearer', '').trim();
+
+    try {
+        const response = await axios.put(`https://api.bling.com.br/Api/v3/produtos/${id}`, req.body, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        res.json(response.data);
+    } catch (error) {
+        console.error("Erro ao editar produto:", error.response?.data);
+        res.status(error.response?.status || 500).json(error.response?.data);
+    }
+})
 
 const PORT = 3000;
 app.listen(PORT, () => console.log(`Servidor rodando em http://localhost:${PORT}`));

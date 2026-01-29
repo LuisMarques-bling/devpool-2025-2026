@@ -30,9 +30,9 @@
 </template>
 
 <script lang="ts">
-import { useFormStore } from '../stores/formStore';
+import { useFormStore } from '../../stores/formStore';
 import { mapState, mapActions } from 'pinia';
-import Input from './Input.vue';
+import Input from '../site/Input.vue';
 
 export default {
     name: 'Formulario',

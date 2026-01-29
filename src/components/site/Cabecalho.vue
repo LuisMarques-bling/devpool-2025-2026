@@ -2,7 +2,7 @@
   <header>
     <div class="container cabecalho-grid">
       <div class="header-left">
-        <img src="../assets/images/Logo.png" alt="Logo Ficticio" class="logo">
+        <img src="../../assets/images/Logo.png" alt="Logo Ficticio" class="logo">
       </div>
         <div class="header-center">
           <nav v-if="!authStore.isAuthenticated">
@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import { useRouter } from 'vue-router';
-import { useAuthStore } from '../stores/auth';
+import { useAuthStore } from '../../stores/auth';
 
 export default {
   setup() {

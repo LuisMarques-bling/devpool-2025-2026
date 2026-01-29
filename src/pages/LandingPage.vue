@@ -6,9 +6,9 @@
 
 
 <script lang="ts">
-import Hero from './Hero.vue';
-import Plans from './Plans.vue';
-import Formulario from './Formulario.vue';
+import Hero from '../components/site/Hero.vue';
+import Plans from '../components/site/Plans.vue';
+import Formulario from '../components/forms/Formulario.vue';
 
 
 export default{

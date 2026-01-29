@@ -8,7 +8,7 @@
                     estratégicas baseadas em dados reais.</p>
                 <a href="#contato" class="container__button"><button>Experimente Grátis</button></a>
             </div>
-            <img src="../assets/images/ImagemFicticia1.png" alt="PessoaFicticiatrabalhando" class="container__img"
+            <img src="../../assets/images/ImagemFicticia1.png" alt="PessoaFicticiatrabalhando" class="container__img"
                 width="20%">
         </div>
     </section>
