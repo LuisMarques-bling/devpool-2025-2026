@@ -1,13 +1,13 @@
 <template>
-    <section class="plans" id = "planos">
-        <div v-for="plan in plans" :key="plan.name"
-             :class="['plans__' + plan.type, { 'plans__highlight': plan.destaque === true && highlight, 'plans__card': true }]" >
-            <a href="#contato" class="plans__link" id = "funcionalidades">
+    <section class="plans" id ="planos">
+        <div id ="funcionalidades" v-for="plan in plans" :key="plan.name"
+             :class="['plans__' + plan.type, { 'plans__highlight': plan.destaque && highlight, 'plans__card': true }]" >
+            <a href="#contato" class="plans__link">
                 <h3 :class="'plans__' + plan.type + '-titulo'">{{ plan.name }}</h3>
                 <p :class="'plans__' + plan.type + '-texto'">{{ plan.currency }} {{ plan.price.toFixed(2) }}</p>
                 <p :class="'plans__' + plan.type + '-texto'">{{ plan.periodicity }}</p>
                 <p :class="'plans__' + plan.type + '-texto'"v-html = "plan.features.join('<br>')"></p>
-                <button class="contratar">Contratar</button>
+                <span class="contratar" role="button">Contratar</span>
             </a>
             <div class="plans__details" aria-hidden="true">
                 <p class="plans__desc">{{ plan.periodicity }}</p>
@@ -56,6 +56,11 @@ export default {
     text-align: center;
     border-radius: 15px;
     color: var(--cor-texto);
+    position: relative;
+    width: 260px;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    background-clip: padding-box;
 }
 
 .plans__basic-titulo, .plans__essential-titulo, .plans__premium-titulo {
@@ -77,16 +82,6 @@ export default {
 a {
     text-decoration: none;
     color: var(--cor-texto);
-}
-
-.plans__basic,
-.plans__essential,
-.plans__premium {
-    position: relative;
-    width: 260px;
-    padding: 1.5rem;
-    box-sizing: border-box;
-    background-clip: padding-box;
 }
 
 .plans__link {

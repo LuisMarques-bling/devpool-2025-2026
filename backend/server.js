@@ -3,19 +3,20 @@ import axios from 'axios';
 import cors from 'cors';
 import 'dotenv/config';
 
-console.log("ID fo Cliente carregado no Server:", process.env.BLING_CLIENT_ID);
-
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+const getBlingToken = (req) => {
+    const authHeader = req.headers.authorization;
+    return authHeader ? authHeader.replace('Bearer', '').trim() : '';
+}
+
 app.post('/auth/bling', async (req, res) => {
     const { code } = req.body;
-
     const clientId = process.env.BLING_CLIENT_ID;
     const clientSecret = process.env.BLING_CLIENT_SECRET;
-
     const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
 
     try {
@@ -31,24 +32,16 @@ app.post('/auth/bling', async (req, res) => {
                 }
             }
         );
-
-        console.log('Token gerado com  sucesso via Proxy!')
         res.json(response.data);
     } catch (error) {
-        console.error("Erro no proxy:", error.response?.data || error.message);
-        res.status(error.response?.status || 500).json({
-            error: 'Erro ao trocar token no Bling',
-            details: error.response?.data
-        });
+        console.error("Erro ao obter token do Bling:", error.response?.data || error.message);
+        res.status(error.response?.status || 500).json(error.response?.data || { error: 'Erro ao obter token do Bling' });
     }
 });
 
 app.get('/api/produtos', async (req, res) => {
-    const authHeader = req.headers.authorization;
-    if (!authHeader) return res.status(401).json({ error: 'Token não fornecido' });
-
+    const token = getBlingToken(req);
     const { pagina, pesquisa, situacao, dataInicial, dataFinal } = req.query;
-    const token = authHeader.replace('Bearer', '').trim();
 
     try {
 
@@ -90,10 +83,7 @@ app.get('/api/produtos', async (req, res) => {
 });
 
 app.post('/api/produtos', async (req, res) => {
-    const authHeader = req.headers.authorization;
-    if (!authHeader) return res.status(401).json({ error: 'Token não fornecido' });
-
-    const token = authHeader.replace('Bearer', '').trim();
+    const token = getBlingToken(req);
 
     try {
         const response = await axios.post('https://api.bling.com.br/Api/v3/produtos', req.body, {
@@ -104,18 +94,14 @@ app.post('/api/produtos', async (req, res) => {
         });
         res.status(201).json(response.data);
     } catch (error) {
-        console.error("Erro ao cadastrar no Bling:", error.response?.data);
         res.status(error.response?.status || 500).json(error.response?.data);
     }
 });
 
 app.delete('/api/produtos/:id', async (req, res) => {
-    const authHeader = req.headers.authorization;
-    if (!authHeader) return res.status(401).json({ error: 'Token não fornecido' });
+    const token = getBlingToken(req);
 
     const { id } = req.params;
-
-    const token = authHeader.replace('Bearer', '').trim();
 
     try {
         await axios.patch(`https://api.bling.com.br/Api/v3/produtos/${id}/situacoes`,
@@ -124,21 +110,15 @@ app.delete('/api/produtos/:id', async (req, res) => {
                 headers: { 'Authorization': `Bearer ${token}`, }
             });
 
-        console.log(`Produto ${id} excluido com sucesso no Bling`)
         res.status(204).send();
     } catch (error) {
-        console.error("Erro ao deletar:", error.response?.data);
-        res.status(error.response?.status || 500).json({
-            message: 'Erro ao excluir no Bling',
-            detalhes: error.response?.data || error.message
-        });
+        res.status(error.response?.status || 500).json(error.response?.data);
     }
 });
 
 app.get('/api/produtos/:id', async (req, res) => {
-    const authHeader = req.headers.authorization;
+    const token = getBlingToken(req);
     const { id } = req.params;
-    const token = authHeader.replace('Bearer', '').trim();
 
     try {
         const response = await axios.get(`https://api.bling.com.br/Api/v3/produtos/${id}`, {
@@ -146,15 +126,13 @@ app.get('/api/produtos/:id', async (req, res) => {
         });
         res.json(response.data);
     } catch (error) {
-        console.error("Erro ao buscar produto:", error.response?.data);
         res.status(error.response?.status || 500).json(error.response?.data);
     }
 });
 
 app.put('/api/produtos/:id', async (req, res) => {
-    const authHeader = req.headers.authorization;
+    const token = getBlingToken(req);
     const { id } = req.params;
-    const token = authHeader.replace('Bearer', '').trim();
 
     try {
         const response = await axios.put(`https://api.bling.com.br/Api/v3/produtos/${id}`, req.body, {
@@ -162,7 +140,6 @@ app.put('/api/produtos/:id', async (req, res) => {
         });
         res.json(response.data);
     } catch (error) {
-        console.error("Erro ao editar produto:", error.response?.data);
         res.status(error.response?.status || 500).json(error.response?.data);
     }
 })

@@ -16,19 +16,15 @@ const router = useRouter();
 const authStore = useAuthStore();
 
 onMounted(async () => {
-  console.log('Componente Callback montado');
 
   const code = route.query.code as string;
   const state = route.query.state as string;
-  console.log('Code capturado da URL: ', code);
 
   if (code && state) {
     try {
       await authStore.exchangeCodeForToken(code, state);
-      console.log("Autenticação e validação de state concluidas");
       router.push('./Produtos');
     } catch (error) {
-      console.error("Falha na autenticação ou State inválido");
       router.push('/')
     }
   }

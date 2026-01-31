@@ -5,7 +5,7 @@
             <form @submit.prevent="handleSubmit" novalidate>
                 <Input label="Nome Completo" id="nome" v-model="formData.nome" required :erro="erros.nome"
                     placeholder="Nome Completo" />
-                <Input label="E-mail" type="email" id="nome" v-model="formData.email" required :erro="erros.email"
+                <Input label="E-mail" type="email" id="email" v-model="formData.email" required :erro="erros.email"
                     placeholder="exemplo@exemplo.com" />
                 <Input label="Telefone" type="tel" id="telefone" v-model="formData.telefone"
                     placeholder="(00) 00000-0000" />
@@ -49,7 +49,6 @@ export default {
             const data = this.formData;
             return (
                 data.nome !== '' &&
-                data.email.trim() !== '' &&
                 data.email.includes('@') &&
                 data.nomeEmpresa.trim() !== '' &&
                 data.tamanhoEmpresa.trim() !== '' &&
@@ -73,7 +72,7 @@ export default {
             const data = this.formData;
 
             if (data.nome.length < 3) this.erros.nome = "Preencha um nome válido";
-            if (!data.email.includes('@')) this.erros.email = "Insira um e-mail válido";
+            if (!data.email || !data.email.includes('@')) this.erros.email = "Insira um e-mail válido";
             if (!data.nomeEmpresa.trim()) this.erros.nomeEmpresa = "O nome da empresa é obrigatório";
             if (!data.tamanhoEmpresa) this.erros.tamanhoEmpresa = "Selecione o tamanho de sua empresa";
             if (!data.mensagem.trim()) this.erros.mensagem = "A mensagem não pode estar vazia";
@@ -88,7 +87,7 @@ export default {
             } else {
                 this.erroGenerico = true;
                 this.$nextTick(() => {
-                    const primeiroErro = document.querySelector('.erro-mensagem');
+                    const primeiroErro = this.$el.querySelector('.erro-mensagem');
                     if (primeiroErro) {
                         primeiroErro.scrollIntoView({ behavior: 'smooth', block: 'center' })
                     }
@@ -130,12 +129,11 @@ h2 {
     font-weight: 700;
     font-size: 18px;
     cursor: pointer;
-    transition: background 0.3s;
     transition: all 0.3s ease;
 }
 
 .btn-enviar:hover {
-    background-color: var(--cor-primaria);
+    background-color: var(--cor-secundaria);
 }
 
 input:invalid:focus,

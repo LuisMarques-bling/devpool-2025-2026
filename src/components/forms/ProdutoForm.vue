@@ -92,33 +92,18 @@ const emit = defineEmits(['voltar', 'salvar', 'cancelar']);
 
 const salvar = () => {
     erros.value = {};
-    let valido = true;
+    
+    const obrigatorios = ['nome', 'codigo', 'preco', 'formato', 'tipo', 'situacao'];
 
-    if (!props.produto.nome) {
-        erros.value.nome = true;
-        valido = false;
-    }
-    if (!props.produto.codigo) {
-        erros.value.codigo = true;
-        valido = false;
-    }
+    obrigatorios.forEach((campo) => {
+        if (!props.produto[campo]) {
+            erros.value[campo] = true;
+        }
+    });
     if (!props.produto.preco || props.produto.preco <= 0) {
         erros.value.preco = true;
-        valido = false;
     }
-    if (!props.produto.formato) {
-        erros.value.formato = true;
-        valido = false;
-    }
-    if (!props.produto.tipo) {
-        erros.value.tipo = true;
-        valido = false;
-    }
-    if (!props.produto.situacao) {
-        erros.value.situacao = true;
-        valido = false;
-    }
-    if (Object.keys(erros.value).length === 0 && valido) {
+    if (Object.keys(erros.value).length === 0) {
         emit('salvar');
     } else {
         alert('Por favor, preencha os campos obrigatórios corretamente.');
@@ -185,12 +170,6 @@ const salvar = () => {
 .msg-erro {
     color: #d93025;
     font-size: 0.8rem;
-}
-
-.acoes-form {
-    margin-top: 2rem;
-    display: flex;
-    justify-content: flex-end;
 }
 
 .botoes-form {

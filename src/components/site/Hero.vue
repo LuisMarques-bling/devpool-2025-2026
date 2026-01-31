@@ -1,15 +1,14 @@
 <template>
-    <section class="hero" id = "inicio">
+    <section class="hero" id="inicio">
         <div class="container">
             <div class="container__texto">
-                <h2 class="container__titulo"> A melhor escolha para sua gestão empresarial</h2>
+                <h2 class="container__titulo">A melhor escolha para sua gestão empresarial</h2>
                 <p class="container__paragrafo">Assuma o controle total do seu negócio com uma plataforma que integra
                     todos os seus processos em uma interface intuitiva, substituindo o caos das planilhas por decisões
                     estratégicas baseadas em dados reais.</p>
-                <a href="#contato" class="container__button"><button>Experimente Grátis</button></a>
+                <a href="#contato" class="container__button" role="button">Experimente Grátis</a>
             </div>
-            <img src="../../assets/images/ImagemFicticia1.png" alt="PessoaFicticiatrabalhando" class="container__img"
-                width="20%">
+            <img src="../../assets/images/ImagemFicticia1.png" alt="Pessoa fictícia trabalhando" class="container__img">
         </div>
     </section>
 </template>
@@ -60,20 +59,23 @@ export default {
     text-align: center;
 }
 
-.container__button button {
+.container__button {
     background-color: var(--cor-terciaria);
     color: var(--cor-texto);
-    border: none;
     padding: 1rem 2rem;
     border-radius: 8px;
     font-size: 16px;
     font-weight: 700;
     cursor: pointer;
     font-family: var(--fonte-principal);
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
 }
 
-.container__button button:hover {
+.container__button:hover {
     background-color: var(--cor-secundaria);
+    transform: translateY(-1px) scale(1.05);
 }
 
 .container__img {

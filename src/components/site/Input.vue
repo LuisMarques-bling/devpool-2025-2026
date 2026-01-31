@@ -79,10 +79,6 @@ textarea {
     margin-left: 2px;
 }
 
-.erro-input {
-    border-color: #e74c3c;
-}
-
 .erro-mensagem {
     color: #e74c3c;
     font-size: 14px;

@@ -36,7 +36,6 @@ export const useAuthStore = defineStore('auth', {
                 localStorage.setItem('refresh_token', this.refreshToken!)
                 sessionStorage.removeItem('oauth_state');
 
-                console.log("Token recebido do Proxy:", response.data);
                 return response.data;
             } catch (error) {
                 this.logout();

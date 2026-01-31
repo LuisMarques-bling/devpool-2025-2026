@@ -2,6 +2,15 @@ import { defineStore } from "pinia";
 import axios from "axios";
 import { useAuthStore } from "./auth.ts";
 
+export interface Produto {
+    id: number;
+    nome: string;
+    codigo: string;
+    preco: number | null;
+    situacao: string;
+    unidade: string;
+}
+
 interface Filtros {
     pagina: number;
     situacao: string;
@@ -13,7 +22,7 @@ interface Filtros {
 
 export const useProdutoStore = defineStore('produto', {
     state: () => ({
-        produtos: [] as any [],
+        produtos: [] as Produto[],
         filtros: {
             pagina: 1,
             situacao: 'U',
@@ -24,10 +33,12 @@ export const useProdutoStore = defineStore('produto', {
         carregando: false,
         temMais: true
     }),
+
     actions: {
         setFiltros(novosFiltros: Partial<Filtros>) {
             this.filtros = { ...this.filtros, ...novosFiltros };
         },
+
         resetFiltros() {
             this.filtros = {
                 pagina: 1,
@@ -39,34 +50,40 @@ export const useProdutoStore = defineStore('produto', {
             this.produtos = [];
             this.temMais = true;
         },
-        async buscarProdutos (paginaForcada ?: number) {
+
+        async buscarProdutos(paginaForcada?: number) {
             this.carregando = true;
 
-            if (paginaForcada !== undefined){
+            if (paginaForcada !== undefined) {
                 this.filtros.pagina = paginaForcada;
             }
 
             try {
                 const authStore = useAuthStore();
-                const response = await axios.get('http://localhost:3000/api/produtos',{
-                    params: {
-                        pagina: this.filtros.pagina,
-                        pesquisa: this.filtros.pesquisa,
-                        situacao: this.filtros.situacao,
-                        dataInicial: this.filtros.dataInicio,
-                        dataFinal: this.filtros.dataFim
-                    },
-                    headers: { 'Authorization': `Bearer ${authStore.accessToken}`}
+
+                const params: any = {
+                    pagina: this.filtros.pagina,
+                    pesquisa: this.filtros.pesquisa,
+                    situacao: this.filtros.situacao,
+                };
+
+                if (this.filtros.dataInicio) params.dataInicial = this.filtros.dataInicio;
+                if (this.filtros.dataFim) params.dataFinal = this.filtros.dataFim;
+
+                const response = await axios.get('http://localhost:3000/api/produtos', {
+                    params,
+                    headers: { 'Authorization': `Bearer ${authStore.accessToken}` }
                 });
+
                 const listaRetornada = response.data.data || [];
 
-                if (listaRetornada.length === 0 && this.filtros.pagina > 1){
+                if (listaRetornada.length === 0 && this.filtros.pagina > 1) {
                     this.filtros.pagina--;
                     this.temMais = false;
                     alert('Você já está na última página.')
                 } else {
                     this.produtos = listaRetornada;
-                    this.temMais = listaRetornada.length === 10;
+                    this.temMais = listaRetornada.length >= 10;
                 }
 
             } catch (error: any) {

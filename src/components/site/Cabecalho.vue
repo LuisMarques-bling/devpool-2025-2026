@@ -2,13 +2,13 @@
   <header>
     <div class="container cabecalho-grid">
       <div class="header-left">
-        <img src="../../assets/images/Logo.png" alt="Logo Ficticio" class="logo">
+        <img src="../../assets/images/Logo.png" alt="Logo Fictício" class="logo">
       </div>
         <div class="header-center">
           <nav v-if="!authStore.isAuthenticated">
             <ul>
               <li v-for="item in menuItens" :key="item.id"><a :href="'#' + item.id" class="navigation"
-                  @click.prevent="() => scrollToSection(item.id)">{{ item.nome }}</a></li>
+                  @click.prevent="scrollToSection(item.id)">{{ item.nome }}</a></li>
             </ul>
           </nav>
         </div>
@@ -50,11 +50,11 @@ export default {
     return { authStore, iniciarLogin, executarLogout }
 
   },
-  name: 'cabecalho',
+  name: 'Cabecalho',
   data() {
     return {
       menuItens: [
-        { nome: 'Inicio', id: 'inicio' },
+        { nome: 'Início', id: 'inicio' },
         { nome: 'Funcionalidades', id: 'funcionalidades' },
         { nome: 'Planos', id: 'planos' },
         { nome: 'Contato', id: 'contato' },
@@ -102,7 +102,7 @@ header {
   position: sticky;
   top: 0;
   z-index: 1000;
-  width: 100%
+  width: 100%;
 }
 
 .container {
@@ -173,11 +173,6 @@ nav ul li a:hover {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-}
-
-.material-icons-outlined {
-  font-size: 24px;
-  color: var(--cor-primaria);
 }
 
 .label-conta {

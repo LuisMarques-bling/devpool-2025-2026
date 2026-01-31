@@ -4,12 +4,11 @@
 
         <div class="botoes-container">
             <div class="filtros-busca">
-
                 <select v-model="filtros.situacao" class="select-situacao">
                     <option value="U">Últimos incluídos</option>
                     <option value="A">Ativos</option>
                     <option value="I">Inativos</option>
-                    <option value="E">Excluidos</option>
+                    <option value="E">Excluídos</option>
                     <option value="T">Todos</option>
                 </select>
                 <input v-model="filtros.pesquisa" class="input-filtro search-input"
@@ -21,6 +20,7 @@
                     <input type="date" v-model="filtros.dataFim" class="input-data">
                 </div>
                 <button @click="handleFiltrar" class="btn-filtrar">Filtrar</button>
+                <button @click="limpar" class="btn-filtrar"> Limpar</button>
             </div>
             <div>
                 <button @click="excluirSelecionados" class="btn-excluir" :disabled="selecionados.length === 0"
@@ -41,17 +41,17 @@
                 <tr>
                     <th><input type="checkbox" @change="alternarTodos"
                             :checked="selecionados.length === produtos.length && produtos.length > 0"></th>
-                    <th>#</th>
-                    <th>Nome</th>
-                    <th>Código (SKU)</th>
-                    <th>Unidade</th>
-                    <th>Preço</th>
-                    <th>Situação</th>
-                    <th>Ações</th>
+                    <th style="width:5%;">#</th>
+                    <th style="width:60%;">Nome</th>
+                    <th style="width:10%;">Código (SKU)</th>
+                    <th style="width:7%;">Unidade</th>
+                    <th style="width:10%;">Preço</th>
+                    <th style="width:5%;">Situação</th>
+                    <th style="width:3%;">Ações</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(produto, index) in produtos" :key="produto.id" class="produtos-table-container">
+                <tr v-for="(produto, index) in produtos" :key="produto.id" class="produtos-table-container" @click.prevent="editarProduto(produto.id)">
                     <td>
                         <input type="checkbox" :value="produto.id" :checked="selecionados.includes(produto.id)"
                             @change="alternarSelecao(produto.id)">
@@ -98,7 +98,11 @@ const authStore = useAuthStore();
 const router = useRouter();
 const paginaAtual = ref(1);
 const store = useProdutoStore();
-const { filtros, produtos, carregando, temMais } = storeToRefs(store)
+const { filtros, produtos, carregando} = storeToRefs(store);
+const limpar = async () => {
+    store.resetFiltros();
+    await store.buscarProdutos(1);
+};
 
 
 const formatarSituacao = (status: string | number) => {
@@ -270,6 +274,7 @@ const editarProduto = (id: number) => {
 .produtos-table-container:hover td {
     background-color: rgba(255, 255, 255, 0.3);
     transition: background 0.3 ease;
+    cursor: pointer;
 }
 
 .btn-filtrar {
@@ -402,7 +407,7 @@ const editarProduto = (id: number) => {
     width: 13%;
     border: 1px solid var(--cor-primaria);
     margin-top: 0;
-    padding: 0;
+    padding-left: 7px;
 }
 
 .search-input {
@@ -448,5 +453,17 @@ const editarProduto = (id: number) => {
     background-color: var(--cor-terciaria);
     color: var(--cor-texto);
     margin-top: 0;
+}
+
+.produtos-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--cor-primaria);
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.produtos-table tr{
+    height: 60px;
 }
 </style>
